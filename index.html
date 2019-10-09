@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Mahler discography.</title>       
+  </head>
+  <body>
+       <p>Mahler discography from  <a href="https://mahlerfoundation.info/index.php/discography2">Mahler foundation archive</a></p>
+       <div id="draw"></div>
+        <br/>
+        Code in <A href='https://github.com/dk76/MahlerDiscography'>git</A>
+
+
+  </body>
+  
+  
+
+
+  <script>
+    var data=[];
+
+    function ready() {
+     
+
+        fetch("./data.json")
+        .then(response => response.json())
+        .then(json => firstDraw(json));
+  
+      
+    }
+
+    function initData(js_data){
+
+        for(i=0;i<js_data.length;i++){
+        localStorage.setItem(js_data[i].Name,"Symphony");
+        localStorage.setItem(js_data[i].Conductor,"Conductor")
+       }
+
+    }
+
+    //---------------------------------------
+    function showSymphony(s)
+    {
+      
+        var htmlBuffer=[];
+        var a=[];
+
+
+
+        for(var i=0;i<data.length;i++){
+            if(data[i].Name==s){
+                a.push(data[i]);
+            }
+        }
+
+        a.sort(function(a1,b1){
+            return a1.Year>b1.Year;
+        });
+
+        htmlBuffer.push("<A href='#' onclick='firstDraw(data);'>Начало</A><BR />");  
+        htmlBuffer.push("<TABLE border='1' style='border-collapse:collapse;'>");
+
+
+        for(var i=0;i<a.length;i++){
+
+            var q="Mahler "+a[i].Conductor+" "+a[i].Name+" "+a[i].Label+" "+a[i].Soloists+" "+a[i].Orchestra;
+
+            htmlBuffer.push("<TR><TD>"+a[i].Image+"</TD><TD>"+a[i].Year+"</TD><TD><A href='https://www.google.com/search?q="+q+"' target='_blank'>'"+a[i].Conductor+"</A></TD><TD>"+a[i].Soloists+"</TD><TD>"+a[i].Orchestra+"</TD></TR>");
+            }
+        htmlBuffer.push("</TABLE>");
+
+        let element=document.getElementById("draw");
+        element.innerHTML=htmlBuffer.join("");
+
+            
+        return false;
+    }
+
+    //---------------------------------------
+    function showConductor(s)
+    {
+        var htmlBuffer=[];
+        var a=[];
+
+
+
+        for(var i=0;i<data.length;i++){
+            if(data[i].Conductor==s){
+                a.push(data[i]);
+            }
+        }
+
+
+        a.sort(function(a1,b1){
+            return a1.Year>b1.Year;
+        });
+
+            
+        htmlBuffer.push("<A href='#' onclick='firstDraw(data);'>Начало</A><BR />");   
+        htmlBuffer.push("<H1><A href='https://www.google.com/search?q="+s+" conductor wiki' target='_blank'>"+s+"</A></H1>"); 
+        htmlBuffer.push("<TABLE border='1' style='border-collapse:collapse;'>");
+
+        for(var i=0;i<a.length;i++){
+
+            var q="Mahler "+s+" "+a[i].Name+" "+a[i].Label+" "+a[i].Soloists+" "+a[i].Orchestra;
+
+            htmlBuffer.push("<TR><TD>"+a[i].Image+"</TD><TD>"+a[i].Year+"</TD><TD><A href='https://www.google.com/search?q="+q+"' target='_blank'>'"+a[i].Name+"</A></TD><TD>"+a[i].Soloists+"</TD><TD>"+a[i].Orchestra+"</TD></TR>");
+        }
+        htmlBuffer.push("</TABLE>");
+
+        let element=document.getElementById("draw");
+        element.innerHTML=htmlBuffer.join("");
+
+        return false;
+    }
+
+    //---------------------------------------
+    function firstDraw(js_data){                   
+       
+       initData(js_data);
+       data=js_data;
+
+       let element=document.getElementById("draw");
+       console.log(element);
+       
+       var cons=[];
+       var syms=[];
+
+
+
+
+       for (var i = 0; i < localStorage.length; i++){
+            let val=(localStorage.getItem(localStorage.key(i)));
+            if(val=="Conductor") cons.push(localStorage.key(i));  
+            else
+            if(val=="Symphony")syms.push(localStorage.key(i));  
+        }
+
+        cons.sort(function(s1,s2){
+            return s1>s2;
+        });
+
+        syms.sort(function(s1,s2){
+            return s1>s2;
+        });
+
+        var htmlBuffer = [];
+
+        for(var i=0;i<syms.length;i++){
+             htmlBuffer.push("<a href='#'' onclick='showSymphony(\""+syms[i]+"\");'>"+syms[i]+"</a><BR />");  
+        }
+
+
+        htmlBuffer.push("<BR />");
+        for(var i=0;i<cons.length;i++){
+            htmlBuffer.push("<a href='#'' onclick='showConductor(\""+cons[i]+"\");'>"+cons[i]+"</a><BR />");  
+        }
+
+
+
+
+       
+        element.innerHTML=htmlBuffer.join("");
+
+    }
+
+  
+    document.addEventListener("DOMContentLoaded", ready);
+  </script>
+
+</html>
