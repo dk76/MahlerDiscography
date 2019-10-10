@@ -7,50 +7,34 @@ using System.Text.Json;
 
 namespace dotnetcoreconsole
 {
-
     class Record
     {
         public string Name { get; set; } = "";
         public string Year { get; set; } = "";
-
         public string Conductor { get; set; } = "";
-
         public string Orchestra { get; set; } = "";
-
         public string Version { get; set; } = "";
-
         public string Label { get; set; } = "";
-
         public string RecDate { get; set; } = "";
-
         public string Soloists { get; set; } = "";
-
         public string Live { get; set; } = "";
         public string Image { get; set; } = "";
-
     }
-
     class ColumnIndexes
     {
         public int YearIndex = -1;
         public int ConductorIndex = -1;
-
         public int OrchestraIndex = -1;
         public int VersionIndex = -1;
         public int LabelIndex = -1;
         public int RecDateIndex = -1;
-
         public int SoloistIndex = -1;
-
         public int LiveIndex = -1;
-
     }
-
     class ConcurentList
     {
         List<Record> _items = new List<Record>();
         object sync = new Object();
-
         public void addItem(Record r)
         {
             lock (sync)
@@ -58,28 +42,21 @@ namespace dotnetcoreconsole
                 _items.Add(r);
             }
         }
-
         public void addItems(List<Record> l)
         {
             lock (sync)
             {
                 _items.AddRange(l);
-
             }
         }
-
         public Record[] ToArray()
         {
             lock (sync)
                 return _items.ToArray();
-
         }
-
     }
-
     static class ExtendStaticClass
     {
-
         public static string deleteTags(this string s)
         {
             s = s.Replace("<td>", "").Replace("</td>", "").Replace("<p>", "").Replace("</p>", " ").Replace("<br />", " ").Trim();
@@ -89,12 +66,9 @@ namespace dotnetcoreconsole
                 return s.Replace(res.Value, "");
             return s;
         }
-
     }
-
     class Program
     {
-
         static string catalogURL = "https://mahlerfoundation.info/index.php/discography2";
         static string domainURL = "https://mahlerfoundation.info";
         static async Task<string> LoadPage(string url)
@@ -126,21 +100,16 @@ namespace dotnetcoreconsole
                     Trim();
                     Console.WriteLine(s);
                     l.Add(s);
-
                 }
                 res = res.NextMatch();
             }
-
             return l.ToArray();
         }
-
         static string getName(string body)
         {
             if (body == null) return "";
-
             Regex r = new Regex("<h2 itemprop=\"headline\">(.|\\n)*?</h2>");
             var res = r.Match(body);
-
             if (res.Success)
             {
                 return res.Value.Replace("<h2 itemprop=\"headline\">", "").Replace("</h2>", "").Trim();
@@ -196,7 +165,6 @@ namespace dotnetcoreconsole
             }
             return record;
         }
-
         static ColumnIndexes getColumnIndexes(string header)
         {
             var c = new ColumnIndexes();
@@ -233,7 +201,6 @@ namespace dotnetcoreconsole
             }
             return c;
         }
-
         static List<Record> getItems(string body, string name)
         {
             var l = new List<Record>();
@@ -253,7 +220,6 @@ namespace dotnetcoreconsole
             }
             return l;
         }
-
         static string ConvertToSql(Record[] a)
         {
             var s = "";
@@ -265,7 +231,6 @@ namespace dotnetcoreconsole
             }
             return s;
         }
-
         static void Main(string[] args)
         {
             var items = new ConcurentList();
@@ -279,6 +244,5 @@ namespace dotnetcoreconsole
             Console.WriteLine("End");
             Console.ReadLine();
         }
-
     }
 }
