@@ -47,7 +47,7 @@
 
             var q = "Mahler " + a[i].Conductor + " " + a[i].Name + " " + a[i].Label + " " + a[i].Soloists + " " + a[i].Orchestra;
 
-            htmlBuffer.push("<TR><TD>" + a[i].Image + "</TD><TD>" + a[i].Year + "</TD><TD><A href='https://www.google.com/search?q=" + q + "' target='_blank'>'" + a[i].Conductor + "</A></TD><TD>" + a[i].Soloists + "</TD><TD>" + a[i].Orchestra + "</TD></TR>");
+            htmlBuffer.push("<TR><TD>" + a[i].Image + "</TD><TD>" + a[i].Year + "</TD><TD><A href='https://www.google.com/search?q=" + q + "' target='_blank'>" + a[i].Conductor + "</A></TD><TD>" + a[i].Soloists + "</TD><TD>" + a[i].Orchestra + "</TD></TR>");
         }
         htmlBuffer.push("</TABLE>");
         let element = document.getElementById("draw");
